@@ -3,7 +3,7 @@ name: Daily digest
 on:
   schedule:
     - cron: "0 10 * * *"
-    timezone: "Europe/Helsinki"
+      timezone: "Europe/Helsinki"
   workflow_dispatch:
 
 permissions:
