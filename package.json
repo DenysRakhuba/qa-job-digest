@@ -6,9 +6,9 @@
   "private": true,
   "scripts": {
     "test": "node --test",
-    "start": "node --env-file-if-exists=.env src/index.ts",
-    "preview": "node --env-file-if-exists=.env src/index.ts --dry-run",
-    "chat-id": "node --env-file-if-exists=.env src/chat-id.ts",
+    "start": "node --env-file-if-exists=.env src/main.ts",
+    "preview": "node --env-file-if-exists=.env src/main.ts --dry-run",
+    "chat-id": "node --env-file-if-exists=.env scripts/chat-id.ts",
     "typecheck": "tsc",
     "lint": "eslint .",
     "format": "prettier --write .",
