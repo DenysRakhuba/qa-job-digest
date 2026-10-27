@@ -2,8 +2,8 @@ name: Daily digest
 
 on:
   schedule:
-    # 05:00 UTC = 07:00 Kyiv in winter, 08:00 in summer. GitHub may start it a bit late.
-    - cron: "0 5 * * *"
+    - cron: "0 10 * * *"
+    timezone: "Europe/Helsinki"
   workflow_dispatch:
 
 permissions:

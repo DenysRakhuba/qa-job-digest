@@ -29,7 +29,7 @@ export function formatDigest(
   const date = now.toLocaleDateString("ru-RU", {
     day: "numeric",
     month: "long",
-    timeZone: "Europe/Kyiv",
+    timeZone: "Europe/Helsinki",
   });
   const excludedTotal = Object.values(digest.excluded).reduce(
     (sum, n) => sum + n,
