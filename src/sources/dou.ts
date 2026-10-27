@@ -1,5 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 import type { Vacancy } from "../types.ts";
+import { decodeEntities, htmlToText, normalizeLink } from "../text.ts";
 
 const DOU_URL =
   "https://jobs.dou.ua/vacancies/feeds/?category=QA&search=automation";
@@ -26,9 +27,9 @@ export async function fetchDou(): Promise<Vacancy[]> {
 
   return items.map((item) => ({
     source: "dou",
-    title: item.title,
-    link: item.link,
-    description: item.description,
+    title: decodeEntities(item.title),
+    link: normalizeLink(item.link),
+    description: htmlToText(item.description),
     publishedAt: item.pubDate,
   }));
 }
