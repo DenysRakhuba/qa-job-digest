@@ -5,12 +5,20 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test",
+    "start": "node --env-file-if-exists=.env src/index.ts",
+    "preview": "node --env-file-if-exists=.env src/index.ts --dry-run",
+    "chat-id": "node --env-file-if-exists=.env src/chat-id.ts",
+    "typecheck": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "fast-xml-parser": "^5.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^7.0.2"
   }
 }
