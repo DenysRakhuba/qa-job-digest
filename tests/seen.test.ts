@@ -1,10 +1,11 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { describe, it } from "node:test";
 import { pathToFileURL } from "node:url";
-import { loadSeen, markSeen, pruneSeen, saveSeen } from "./seen.ts";
+
+import { loadSeen, markSeen, pruneSeen, saveSeen } from "../src/seen.ts";
 
 const NOW = new Date("2026-10-28T06:00:00Z");
 

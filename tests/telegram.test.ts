@@ -1,7 +1,12 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { escapeHtml, formatDigest, splitIntoMessages } from "./telegram.ts";
-import type { Digest } from "./digest.ts";
+import { describe, it } from "node:test";
+
+import type { Digest } from "../src/rank/digest.ts";
+import {
+  escapeHtml,
+  formatDigest,
+  splitIntoMessages,
+} from "../src/telegram.ts";
 
 const NOW = new Date("2026-10-28T06:00:00Z");
 

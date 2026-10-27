@@ -1,5 +1,5 @@
 import { fetchAll } from "./collect/feeds.ts";
-import { buildDigest } from "./digest.ts";
+import { buildDigest } from "./rank/digest.ts";
 import { loadSeen, markSeen, pruneSeen, saveSeen } from "./seen.ts";
 import { formatDigest, sendMessages } from "./telegram.ts";
 

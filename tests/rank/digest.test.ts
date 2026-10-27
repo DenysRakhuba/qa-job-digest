@@ -1,7 +1,8 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { buildDigest, TOP_SIZE } from "./digest.ts";
-import type { Vacancy } from "./types.ts";
+import { describe, it } from "node:test";
+
+import { buildDigest, TOP_SIZE } from "../../src/rank/digest.ts";
+import type { Vacancy } from "../../src/types.ts";
 
 const NOW = new Date("2026-10-28T06:00:00Z");
 

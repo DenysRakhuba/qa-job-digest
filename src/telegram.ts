@@ -1,4 +1,4 @@
-import type { Digest } from "./digest.ts";
+import type { Digest } from "./rank/digest.ts";
 import type { ScoredVacancy } from "./types.ts";
 
 // Telegram rejects messages over 4096 characters; keep a margin.

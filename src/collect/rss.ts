@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+
 import type { Source, Vacancy } from "../types.ts";
 import { decodeEntities, htmlToText, normalizeLink } from "./clean.ts";
 
@@ -13,7 +14,10 @@ type RssItem = {
 
 export function parseRss(xml: string, source: Source): Vacancy[] {
   const parser = new XMLParser({ isArray: (name) => name === "item" });
-  const items: RssItem[] = parser.parse(xml).rss?.channel?.item ?? [];
+  const feed = parser.parse(xml) as {
+    rss?: { channel?: { item?: RssItem[] } };
+  };
+  const items = feed.rss?.channel?.item ?? [];
 
   return items.map((item) => ({
     source,

@@ -1,7 +1,8 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { scoreVacancy } from "./score.ts";
-import type { Vacancy, Verdict } from "./types.ts";
+import { describe, it } from "node:test";
+
+import { scoreVacancy } from "../../src/rank/score.ts";
+import type { Vacancy, Verdict } from "../../src/types.ts";
 
 function vacancy(title: string, description: string): Vacancy {
   return {
@@ -19,7 +20,7 @@ function reasonOf(verdict: Verdict): string | undefined {
 
 function scored(verdict: Verdict) {
   assert.equal(verdict.kind, "scored");
-  return verdict as Extract<Verdict, { kind: "scored" }>;
+  return verdict;
 }
 
 describe("scoreVacancy: hard filters", () => {
@@ -61,6 +62,29 @@ describe("scoreVacancy: hard filters", () => {
       vacancy("QA Automation Engineer", "Playwright, crypto exchange, remote"),
     );
     assert.equal(reasonOf(verdict), "крипта/Web3");
+  });
+
+  it("excludes army and defense", () => {
+    for (const description of [
+      "Playwright, IT-підрозділ ЗСУ",
+      "Playwright, defense sector, remote",
+      "Playwright, БПЛА",
+    ]) {
+      const verdict = scoreVacancy(
+        vacancy("QA Automation Engineer", description),
+      );
+      assert.equal(reasonOf(verdict), "армия/оборонка");
+    }
+  });
+
+  it("keeps companies that only mention supporting veterans", () => {
+    const verdict = scoreVacancy(
+      vacancy(
+        "QA Automation Engineer",
+        "Playwright, remote. We support military veterans",
+      ),
+    );
+    assert.equal(verdict.kind, "scored");
   });
 
   it("does not mistake Ukrainian 'скрипт' for crypto", () => {

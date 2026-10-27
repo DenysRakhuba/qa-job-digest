@@ -1,4 +1,4 @@
-import type { ScoredVacancy, Vacancy } from "./types.ts";
+import type { ScoredVacancy, Vacancy } from "../types.ts";
 import { scoreVacancy } from "./score.ts";
 
 export const TOP_SIZE = 10;

@@ -1,5 +1,6 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+
 import { parseRss } from "../../src/collect/rss.ts";
 
 const ONE_ITEM = `<?xml version="1.0" encoding="utf-8"?>

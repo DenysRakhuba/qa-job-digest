@@ -1,6 +1,7 @@
-import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { formatSalary, parseSalary, salaryTop } from "./salary.ts";
+import { describe, it } from "node:test";
+
+import { formatSalary, parseSalary, salaryTop } from "../../src/rank/salary.ts";
 
 describe("parseSalary", () => {
   it("parses a range from a DOU title", () => {

@@ -9,7 +9,7 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 
 export async function loadSeen(path: URL = SEEN_PATH): Promise<SeenStore> {
   try {
-    return JSON.parse(await readFile(path, "utf8"));
+    return JSON.parse(await readFile(path, "utf8")) as SeenStore;
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return {};
     throw error;
