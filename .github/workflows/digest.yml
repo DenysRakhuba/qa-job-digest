@@ -2,7 +2,7 @@ name: Daily digest
 
 on:
   schedule:
-    - cron: "0 10 * * *"
+    - cron: "45 9 * * *"
       timezone: "Europe/Helsinki"
   workflow_dispatch:
 
