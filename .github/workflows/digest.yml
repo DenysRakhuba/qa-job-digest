@@ -1,5 +1,7 @@
 name: Daily digest
 
+# Started by an external scheduler through the GitHub API: the built-in
+# schedule ran hours late.
 on:
   workflow_dispatch:
 
@@ -29,11 +31,13 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          STATE_KEY: ${{ secrets.STATE_KEY }}
 
-      - name: Commit shown vacancies
+      - name: Commit vacancy state
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/seen.json
-          git diff --staged --quiet || git commit -m "chore: update seen vacancies"
+          git add data/state.json
+          git diff --staged --quiet || git commit -m "chore: update vacancy state"
+          git pull --rebase
           git push

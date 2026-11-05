@@ -16,23 +16,25 @@ export function scoreVacancy(vacancy: Vacancy): Verdict {
   const middle = re.MIDDLE.test(title);
   const junior = re.JUNIOR.test(title) && !middle;
 
-  if (!re.QA_ROLE.test(title)) return excluded("не QA-роль");
-  if (re.MANAGEMENT.test(title)) return excluded("лид/менеджер");
+  if (!re.QA_ROLE.test(title)) return excluded("not a QA role");
+  if (re.MANAGEMENT.test(title)) return excluded("lead/manager");
   if (re.SENIOR.test(title) && !middle) return excluded("Senior");
-  if (re.TRAINEE.test(title)) return excluded("Trainee/стажёр");
+  if (re.TRAINEE.test(title)) return excluded("trainee/intern");
   if (re.MANUAL_TITLE.test(title) && !re.AUTOMATION_TITLE.test(title)) {
-    return excluded("ручное тестирование");
+    return excluded("manual testing");
   }
   if (!re.AUTOMATION_TEXT.test(text))
-    return excluded("нет автоматизации в описании");
-  if (re.CRYPTO.test(text)) return excluded("крипта/Web3");
-  if (re.DEFENSE.test(text)) return excluded("армия/оборонка");
-  if (re.FOREIGN_LANGUAGE.test(text)) return excluded("нужен другой язык");
+    return excluded("no automation in the description");
+  if (re.CRYPTO.test(text)) return excluded("crypto/Web3");
+  if (re.DEFENSE.test(text)) return excluded("army/defense");
+  if (re.FOREIGN_LANGUAGE.test(text))
+    return excluded("another working language");
   if (top !== undefined && top < MIN_SALARY)
-    return excluded(`вилка до $${top}`);
-  if (!remote && re.OFFICE_OR_HYBRID.test(text)) return excluded("офис/гибрид");
+    return excluded(`salary up to $${top}`);
+  if (!remote && re.OFFICE_OR_HYBRID.test(text))
+    return excluded("office/hybrid");
   if (junior && !abroad && (top === undefined || top < MIN_SALARY)) {
-    return excluded("Junior в Украине без вилки от $2500");
+    return excluded("Junior in Ukraine without a $2500+ salary");
   }
 
   const reasons: Reason[] = [];
@@ -46,55 +48,52 @@ export function scoreVacancy(vacancy: Vacancy): Verdict {
   const cypress = re.CYPRESS.test(text);
 
   if (playwright && typescript)
-    add(50, "Playwright + TypeScript — твой основной стек");
-  else if (playwright) add(35, "Playwright в стеке");
-  else if (typescript) add(15, "TypeScript в стеке");
-  else if (javascript) add(15, "JavaScript/Node.js в стеке");
+    add(50, "Playwright + TypeScript, the main stack");
+  else if (playwright) add(35, "Playwright in the stack");
+  else if (typescript) add(15, "TypeScript in the stack");
+  else if (javascript) add(15, "JavaScript/Node.js in the stack");
 
   if (cypress && !playwright) {
-    add(15, "Cypress — близко к твоему опыту");
-    warnings.push("стек отличается: Cypress вместо Playwright");
+    add(15, "Cypress, close to Playwright");
+    warnings.push("different stack: Cypress instead of Playwright");
   }
 
   if (!playwright && !cypress && !typescript && !javascript) {
-    if (re.JAVA.test(text))
-      warnings.push("только Java/Selenium — низкий приоритет");
-    else if (re.PYTHON.test(text))
-      warnings.push("только Python — низкий приоритет");
-    else if (re.CSHARP.test(text))
-      warnings.push("только C#/.NET — низкий приоритет");
+    if (re.JAVA.test(text)) warnings.push("Java/Selenium only, low priority");
+    else if (re.PYTHON.test(text)) warnings.push("Python only, low priority");
+    else if (re.CSHARP.test(text)) warnings.push("C#/.NET only, low priority");
   }
 
-  if (re.API_TESTING.test(text)) add(10, "API-тестирование");
-  if (re.CI_CD.test(text)) add(10, "CI/CD в задачах");
+  if (re.API_TESTING.test(text)) add(10, "API testing");
+  if (re.CI_CD.test(text)) add(10, "CI/CD");
   if (re.ACCESSIBILITY.test(text))
-    add(5, "доступность (a11y) — есть опыт с axe-core");
+    add(5, "accessibility (a11y), axe-core experience");
   if (re.FRONTEND.test(text))
-    add(5, "фронтенд-контекст — твои 9 лет пригодятся");
+    add(5, "frontend context, 9 years of frontend experience");
 
   if (middle) {
-    add(10, "уровень Middle");
+    add(10, "Middle level");
     if (re.SENIOR.test(title))
-      warnings.push("Middle/Senior — могут ждать больше опыта");
+      warnings.push("Middle/Senior, may expect more experience");
   } else if (junior) {
     add(-5, "Junior");
     warnings.push(
       abroad
-        ? "Junior: проверь, что работа правда вне Украины"
-        : "Junior — уровень ниже основного",
+        ? "Junior: check that the job is really outside Ukraine"
+        : "Junior, below the target level",
     );
   }
 
-  if (remote && abroad) add(20, "удалёнка, ЕС/весь мир");
-  else if (remote) add(15, "удалёнка");
-  else warnings.push("формат работы не указан");
+  if (remote && abroad) add(20, "remote, EU/worldwide");
+  else if (remote) add(15, "remote");
+  else warnings.push("work format not stated");
 
   if (re.FINLAND.test(text)) {
-    add(-15, "Финляндия");
-    warnings.push("Финляндия — низкий приоритет");
+    add(-15, "Finland");
+    warnings.push("Finland, low priority");
   }
 
-  if (salary) add(15, `вилка ${formatSalary(salary)}`);
+  if (salary) add(15, `salary ${formatSalary(salary)}`);
 
   const total = reasons.reduce((sum, r) => sum + r.weight, 0);
   const topReasons = reasons

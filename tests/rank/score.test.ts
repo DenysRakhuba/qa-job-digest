@@ -42,26 +42,26 @@ describe("scoreVacancy: hard filters", () => {
     const verdict = scoreVacancy(
       vacancy("QA Team Lead (Manual and Automation)", "Playwright"),
     );
-    assert.equal(reasonOf(verdict), "лид/менеджер");
+    assert.equal(reasonOf(verdict), "lead/manager");
   });
 
   it("excludes non-QA automation roles", () => {
     const verdict = scoreVacancy(
       vacancy("Network Automation Engineer (Ansible)", "automation"),
     );
-    assert.equal(reasonOf(verdict), "не QA-роль");
+    assert.equal(reasonOf(verdict), "not a QA role");
   });
 
   it("excludes manual-only titles", () => {
     const verdict = scoreVacancy(vacancy("Manual QA Engineer", "Playwright"));
-    assert.equal(reasonOf(verdict), "ручное тестирование");
+    assert.equal(reasonOf(verdict), "manual testing");
   });
 
   it("excludes crypto", () => {
     const verdict = scoreVacancy(
       vacancy("QA Automation Engineer", "Playwright, crypto exchange, remote"),
     );
-    assert.equal(reasonOf(verdict), "крипта/Web3");
+    assert.equal(reasonOf(verdict), "crypto/Web3");
   });
 
   it("excludes army and defense", () => {
@@ -73,7 +73,7 @@ describe("scoreVacancy: hard filters", () => {
       const verdict = scoreVacancy(
         vacancy("QA Automation Engineer", description),
       );
-      assert.equal(reasonOf(verdict), "армия/оборонка");
+      assert.equal(reasonOf(verdict), "army/defense");
     }
   });
 
@@ -98,7 +98,7 @@ describe("scoreVacancy: hard filters", () => {
     const verdict = scoreVacancy(
       vacancy("Automation QA в Company, $1900–2300, віддалено", "Playwright"),
     );
-    assert.equal(reasonOf(verdict), "вилка до $2300");
+    assert.equal(reasonOf(verdict), "salary up to $2300");
   });
 
   it("keeps a range that reaches $2500", () => {
@@ -112,14 +112,17 @@ describe("scoreVacancy: hard filters", () => {
     const verdict = scoreVacancy(
       vacancy("QA Automation Engineer", "Playwright. Hybrid, 2 days per week"),
     );
-    assert.equal(reasonOf(verdict), "офис/гибрид");
+    assert.equal(reasonOf(verdict), "office/hybrid");
   });
 
   it("excludes a Junior in Ukraine without a $2500 salary", () => {
     const verdict = scoreVacancy(
       vacancy("Junior AQA Engineer", "Playwright, віддалено"),
     );
-    assert.equal(reasonOf(verdict), "Junior в Украине без вилки от $2500");
+    assert.equal(
+      reasonOf(verdict),
+      "Junior in Ukraine without a $2500+ salary",
+    );
   });
 
   it("keeps a Junior abroad", () => {
@@ -136,7 +139,7 @@ describe("scoreVacancy: hard filters", () => {
         "Playwright, remote. Fluent German required",
       ),
     );
-    assert.equal(reasonOf(verdict), "нужен другой язык");
+    assert.equal(reasonOf(verdict), "another working language");
   });
 });
 
@@ -151,9 +154,7 @@ describe("scoreVacancy: ranking", () => {
       scoreVacancy(vacancy("QA Automation Engineer", "Java, Selenium, remote")),
     );
     assert.ok(playwright.score > selenium.score);
-    assert.ok(
-      selenium.warnings.includes("только Java/Selenium — низкий приоритет"),
-    );
+    assert.ok(selenium.warnings.includes("Java/Selenium only, low priority"));
   });
 
   it("marks Cypress as a different stack", () => {
@@ -161,7 +162,9 @@ describe("scoreVacancy: ranking", () => {
       scoreVacancy(vacancy("QA Automation Engineer", "Cypress, remote")),
     );
     assert.ok(
-      verdict.warnings.includes("стек отличается: Cypress вместо Playwright"),
+      verdict.warnings.includes(
+        "different stack: Cypress instead of Playwright",
+      ),
     );
   });
 
@@ -175,10 +178,7 @@ describe("scoreVacancy: ranking", () => {
       ),
     );
     assert.equal(verdict.reasons.length, 3);
-    assert.equal(
-      verdict.reasons[0],
-      "Playwright + TypeScript — твой основной стек",
-    );
+    assert.equal(verdict.reasons[0], "Playwright + TypeScript, the main stack");
   });
 
   it("caps the score at 100", () => {
@@ -213,7 +213,7 @@ describe("scoreVacancy: ranking", () => {
         vacancy("QA Automation в X, від $3000, віддалено", "Playwright"),
       ),
     );
-    assert.ok(verdict.reasons.includes("вилка от $3000"));
+    assert.ok(verdict.reasons.includes("salary from $3000"));
   });
 
   it("lowers Finland", () => {

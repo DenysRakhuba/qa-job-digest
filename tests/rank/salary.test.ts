@@ -54,7 +54,7 @@ describe("formatSalary", () => {
   });
 
   it("formats bounds", () => {
-    assert.equal(formatSalary({ max: 3000 }), "до $3000");
-    assert.equal(formatSalary({ min: 3000 }), "от $3000");
+    assert.equal(formatSalary({ max: 3000 }), "up to $3000");
+    assert.equal(formatSalary({ min: 3000 }), "from $3000");
   });
 });

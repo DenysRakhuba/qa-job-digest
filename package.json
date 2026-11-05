@@ -8,6 +8,7 @@
     "test": "node --test",
     "start": "node --env-file-if-exists=.env src/main.ts",
     "preview": "node --env-file-if-exists=.env src/main.ts --dry-run",
+    "sync": "node --env-file-if-exists=.env src/sync.ts",
     "chat-id": "node --env-file-if-exists=.env scripts/chat-id.ts",
     "typecheck": "tsc",
     "lint": "eslint .",

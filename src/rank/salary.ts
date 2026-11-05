@@ -54,5 +54,7 @@ export function formatSalary(salary: Salary): string {
       ? `$${salary.min}`
       : `$${salary.min}–${salary.max}`;
   }
-  return salary.max !== undefined ? `до $${salary.max}` : `от $${salary.min}`;
+  return salary.max !== undefined
+    ? `up to $${salary.max}`
+    : `from $${salary.min}`;
 }
